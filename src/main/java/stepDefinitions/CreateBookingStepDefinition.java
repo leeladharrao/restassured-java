@@ -2,24 +2,24 @@ package stepDefinitions;
 
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
-import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import pojo.Booking;
-import pojo.BookingDetails;
 import utils.ResponseHandler;
 import utils.TestContext;
 
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.Map;
 
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 public class CreateBookingStepDefinition {
-    private TestContext context;
     private static final Logger LOG = LogManager.getLogger(CreateBookingStepDefinition.class);
+    private final TestContext context;
 
     public CreateBookingStepDefinition(TestContext context) {
         this.context = context;
@@ -50,11 +50,11 @@ public class CreateBookingStepDefinition {
         Booking booking = ResponseHandler.deserializedResponse(context.response, Booking.class);
         assertNotNull(booking, "Booking not created");
 
-        LOG.info("Newly Created Booking Id: "+booking.getBookingid());
+        LOG.info("Newly Created Booking Id: " + booking.getBookingid());
         validateBookingData(new JSONObject(bookingData), booking);
     }
 
-    private void validateBookingData(JSONObject bookingData, Booking booking) {
+    public void validateBookingData(JSONObject bookingData, Booking booking) {
         assertNotNull(booking.getBookingid(), "Booking is missing");
         assertEquals(bookingData.get("firstname"), booking.getBookingDetails().getFirstname(), "firstname not correct");
         assertEquals(bookingData.get("lastname"), booking.getBookingDetails().getLastname(), "lastname not correct");
@@ -73,7 +73,7 @@ public class CreateBookingStepDefinition {
     @Then("User validates response with JSON Schema {string}")
     public void user_validates_response_with_json_schema(String filename) {
         context.response.then().assertThat()
-                .body(matchesJsonSchemaInClasspath("schemas/"+filename));
+                .body(matchesJsonSchemaInClasspath("schemas/" + filename));
         LOG.info("Create Booking Schema Validated");
     }
 }

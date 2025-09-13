@@ -7,8 +7,8 @@ import utils.TestContext;
 
 public class HeathCheckStepDefinition {
 
-    private TestContext context;
     private static final Logger LOG = LogManager.getLogger(CreateBookingStepDefinition.class);
+    private final TestContext context;
 
     public HeathCheckStepDefinition(TestContext context) {
         this.context = context;

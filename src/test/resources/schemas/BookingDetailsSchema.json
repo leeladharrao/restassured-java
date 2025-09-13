@@ -62,8 +62,7 @@
           "pattern": "^.*$"
         }
       }
-    }
-  ,
+    },
     "additionalneeds": {
       "$id": "#root/additionalneeds",
       "title": "Additionalneeds",

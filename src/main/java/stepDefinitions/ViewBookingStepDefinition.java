@@ -4,21 +4,18 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONObject;
 import pojo.BookingDetails;
-import pojo.BookingId;
 import utils.ResponseHandler;
 import utils.TestContext;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class ViewBookingStepDefinition {
-    private TestContext context;
     private static final Logger LOG = LogManager.getLogger(CreateBookingStepDefinition.class);
+    private final TestContext context;
 
     public ViewBookingStepDefinition(TestContext context) {
         this.context = context;
@@ -31,7 +28,7 @@ public class ViewBookingStepDefinition {
         List<Integer> bookingIds = context.response.getBody().jsonPath().getList("bookingid", Integer.class);
         int randomBookingId = bookingIds.get(new Random().nextInt(bookingIds.size()));
         assertNotNull(randomBookingId, "Booking ID not found!");
-        LOG.info("Booking Id: "+randomBookingId);
+        LOG.info("Booking Id: " + randomBookingId);
         context.session.put("bookingId", randomBookingId);
     }
 
@@ -45,11 +42,11 @@ public class ViewBookingStepDefinition {
 
     @Then("User makes a request to view details of a Booking with Id")
     public void user_makes_a_request_to_view_details_of_a_booking_with_id() {
-        LOG.info("Getting details for Booking Id: "+context.session.get("bookingId"));
+        LOG.info("Getting details for Booking Id: " + context.session.get("bookingId"));
 
         context.response = context.requestSetup()
                 .pathParam("bookingId", context.session.get("bookingId"))
-                .when().get(context.session.get("endpoint")+"/{bookingId}");
+                .when().get(context.session.get("endpoint") + "/{bookingId}");
 
         BookingDetails booking = ResponseHandler.deserializedResponse(context.response, BookingDetails.class);
 
